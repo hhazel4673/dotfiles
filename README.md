@@ -1,1 +1,1 @@
-These configs kinda suck right now and the color scheme doesn't work but I'll get shit up and running soon :D
+Config kinda sucks, I still have to set up lsp and get the color scheme actually working but it's doing well :D
