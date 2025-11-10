@@ -66,7 +66,6 @@ vim.opt.errorbells = false              -- No error bells
 vim.opt.backspace = "indent,eol,start"  -- Better backspace behavior
 vim.opt.autochdir = false               -- Don't auto change directory
 vim.opt.iskeyword:append("-")           -- Treat dash as part of word
-vim.opt.path:append("**")               -- include subdirectories in search
 vim.opt.selection = "exclusive"         -- Selection behavior
 vim.opt.mouse = "a"                     -- Enable mouse support
 vim.opt.clipboard:append("unnamedplus") -- Use system clipboard
@@ -413,102 +412,15 @@ vim.keymap.set('n', '<leader>bd', smart_close_buffer, { desc = 'Smart close buff
 vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 vim.opt.winborder = "rounded"
 
-vim.lsp.set_log_level("debug") -- so I can see what my lsps are doing
+vim.lsp.set_log_level("error") -- so I can see what my lsps are doing
 -- off, trace, debug, info, warn, error
 
---[[ --THIS SHIT SUCKS !!!!!! it's node.js thing eats memory like pancakes
--- Shell LSP setup
-local function setup_shell_lsp()
-    vim.lsp.start({
-        name = 'bashls',
-        cmd = {'bash-language-server', 'start', '--extended-analysis=false'},
-        filetypes = {'sh', 'bash', 'zsh'},
-        root_dir = find_root({'.git', 'Makefile'}),
-        settings = {
-            bashIde = {
-                blobPattern = "*@(.sh|.inc|.bash|.command)"
-            }
-        }
-    })
-end
-]] --
-
---[[
--- Python LSP setup
-local function setup_python_lsp()
-    vim.lsp.start({
-        name = 'pylsp',
-        cmd = {'pylsp'},
-        filetypes = {'python'},
-        root_dir = find_root({'pyproject.toml', 'setup.py', setup.cfg', requirements.txt', '.git'}),
-        settings = {
-            pylsp = {
-                plugins = {
-                    pycodestyle = {
-                        enabled = false
-                    },
-                    flake8 = {
-                        enabled = true
-                    },
-                    black = {
-                        enabled = true
-                    },
-                }
-            }
-        }
-    })
-end
-]] --
-
---[[
--- Lua LSP setup
-local function setup_lua_lsp()
-    vim.lsp.start({
-        name = 'lualsp',
-        cmd = {'lua-lsp'},
-        filetypes = {'lua'},
-        root_dir = find_root({'.git', 'init.lua'}),
-        settings = {
-            Lua = {
-                workspace = {
-                    library = {
-                        vim.api.nvim_get_runtime_file("", true)
-                    }
-                }
-            }
-        }
-    })
-end
-]] --
-
 -- Lua LSP setup using vim.lsp.config, config is in lsp/
-vim.lsp.enable({ "lua_ls" })
+vim.lsp.enable({ "lua_ls", "nixd" })
 
---[[
--- Auto-start LSPs based on filetype
-vim.api.nvim_create_autocmd('FileType', {
-    pattern = 'sh,bash,zsh',
-    callback = setup_shell_lsp,
-    desc = 'Start shell LSP',
-})
-]] --
+-- Do the thing that makes LSPs look nice and things
 
---[[
-vim.api.nvim_create_autocmd('FileType', {
-    pattern = 'python',
-    callback = setup_python_lsp,
-    desc = 'Start python LSP'
-})
-]] --
-
---[[
-vim.api.nvim_create_autocmd('FileType', {
-    pattern = 'lua',
-    callback = setup_lua_lsp,
-    desc = 'Start lua LSP'
-})
-]] --
-
+-- Keymaps
 vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format, { desc = 'Format file' })
 
 -- LSP keymaps
