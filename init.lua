@@ -408,15 +408,38 @@ vim.keymap.set('n', '<leader>bd', smart_close_buffer, { desc = 'Smart close buff
 -- LSP
 -- ============================================================================
 
-
 vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 vim.opt.winborder = "rounded"
 
-vim.lsp.set_log_level("error") -- so I can see what my lsps are doing
+-- awesome epic diagnostic virtual lines (thank you adib hanna)
+vim.diagnostic.config({
+
+    virtual_lines = true,
+    virtual_text = true,
+    underline = true,
+    float = {
+        border = "rounded",
+        source = true,
+    },
+    signs = {
+        text = {
+            [vim.diagnostic.severity.ERROR] = "E ",
+            [vim.diagnostic.severity.WARN] = "W ",
+            [vim.diagnostic.severity.INFO] = "I ",
+            [vim.diagnostic.severity.HINT] = "H ",
+        },
+        numhl = {
+            [vim.diagnostic.severity.ERROR] = "ErrorMsg",
+            [vim.diagnostic.severity.WARN] = "WarningMsg",
+        },
+    },
+})
+
+vim.lsp.set_log_level("trace") -- so I can see what my lsps are doing
 -- off, trace, debug, info, warn, error
 
 -- Lua LSP setup using vim.lsp.config, config is in lsp/
-vim.lsp.enable({ "lua_ls", "nixd" })
+vim.lsp.enable({ "lua_ls", "nixd", "rust_analyzer" })
 
 -- Do the thing that makes LSPs look nice and things
 

@@ -82,4 +82,6 @@ vim.lsp.config('lua_ls', {
                 'selene.yml',
                 '.git',
             },
+            single_file_support = true,
+            log_level = vim.lsp.protocol.MessageType.warning,
         }
